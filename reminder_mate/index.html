@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>QSP Apps</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+    <h1>Reminder Mate</h1>
+    <img src="reminder_mate.png" alt="Reminder Mate Logo" width="100" height="100" />
+    <ul>
+        <li><a href="https://play.google.com/store/apps/details?id=com.qspapps.reminder_mate">Playstore Link</a></li>
+        <li><a href="privacy_policy.html">Privacy Policy</a></li>
+        <li><a href="terms_and_conditions.html">Terms and Conditions</a></li>
+    </ul>
+
+    <p>
+        Reminder Mate is a simple productivity app to help users manage reminders.
+        It allows users to add reminders at specific time and get reminded through notifications.
+        It provides an easy way to snooze reminders or mark completed through notifications itself.
+    </p>
+
+    <p>
+        Reminder Mate is completely offline and does not share any user data.
+        <a href="https://support.google.com/android/answer/2819582?hl=en">Android backup</a> backs
+        up Reminder Mate data as well. You can also do a manual backup and restore through settings page in the app.
+    </p>
+
+    <p>
+        Reminder Mate is ideal for use cases like
+    <ul>
+        <li>Birthdays and Anniversaries</li>
+        <li>Daily chores (boil milk, start washing machine)</li>
+        <li>Weekly chores (Visit grocery store, plan weekend activity, take laptop backup)</li>
+        <li>Monthly chores (Pay rent, newspaper bill)</li>
+        <li>One off (visit dentist, cancel premium trial subscription)</li>
+        <li>Other recurring periods (car service)</li>
+    </ul>
+    </p>
+
+    <p>
+        Reminder Mate is totally free and without any ads. It uses the latest Material 3 UI design.
+        It is built with the philosophy of producing high quality apps that are simple and easy to use.
+    </p>
+
+    <h2><a id="faq">FAQ</a></h2>
+    <p>
+        1. As Reminder Mate is offline, do I need to take regular backup of data? <br />
+        Ans. Android settings has <a href="https://support.google.com/android/answer/2819582?hl=en">device backup</a>
+        feature.
+        This regularly backs up apps on the device (usually on a daily basis) and backs up Reminder Mate data as well.
+        This
+        should be sufficient for most usecases. You can also do a manual backup of Reminder Mate data through settings
+        page of the
+        app and use it to restore reminders later.
+    </p>
+    <p>
+        2. How does purging old reminders from settings page work?<br />
+        Ans. Settings page has an option to purge old reminders by clicking on the corresponding entry. This would
+        delete
+        all reminders that are older than 30 days and are in completed status. If it is a repeating reminder, then start
+        date
+        of the reminder would be updated and all the reminders that are older than that would be deleted. If the
+        repeating
+        reminder has an end time and that is older than 30 days, then that reminder is completely removed.
+    </p>
+    <p>
+        3. How does periodic purge from settings page work?</br>
+        Ans. Periodic purge runs a background job once a day and removes all completed reminders that are more than 30
+        days old.
+    </p>
+
+    <h2>Data Backup Format</h2>
+
+    </p>
+    We believe that data outlives code. It should be easier for users to take their data from one app and export it
+    to another app in case they want to do that. So we publish our data format so that it enables the user to do so.
+    </p>
+    <p>
+        Data is saved in gzipped JSON format when you do a backup from settings page. File has the following format
+        reminder_mate_&lt;yyyyMMdd&gt;_&lt;HHmmss&gt;.json.gz. Eg. reminder_mate_20230712_210259.json.gz.
+    </p>
+    <p>
+        Content is an array of json objects similar to the following.</p>
+
+        <p>One-off reminder</p>
+        <pre><code>
+            {
+                "title": "Take laptop backup",
+                "description": "",
+                "recurrences": [
+                    {
+                        "startTime": "3 Jul 2023 05:13 PM",
+                        "repeatInterval": 0,
+                        "intervalUnit": "none"
+                    }
+                ],
+                "reminders": [
+                    {
+                        "firstWhen": "3 Jul 2023 05:13 PM",
+                        "when": "3 Jul 2023 05:13 PM",
+                        "status": "completed"
+                    }
+                ]
+            }</code>
+        </pre>
+    <p>Recurrences have a <code>startTime</code> and an optional <code>endTime</code>. For one-off reminders, <code>repeatInterval</code> 
+    is 0 and <code>intervalUnit</code> is none. 
+</p>
+    <p>Repeat reminders look like the below</p>
+    <pre><code>
+        {
+            "title": "Pick up milk",
+            "description": "",
+            "recurrences": [
+                {
+                    "startTime": "4 Jul 2023 01:00 PM",
+                    "repeatInterval": 1,
+                    "intervalUnit": "day"
+                }
+            ],
+            "reminders": [
+                {
+                    "firstWhen": "4 Jul 2023 01:00 PM",
+                    "when": "4 Jul 2023 01:00 PM",
+                    "status": "completed"
+                },    
+            ]
+        }
+    </code>
+    </pre>
+    <code>intervalUnit</code> could be hour, minute, day, week, month or year. reminders has entry only for completed reminders or if you have snoozed
+    a reminder. <code>firstWhen</code> differs from <code>when</code> for snoozed reminders. <code>status</code> is todo, completed or deleted.
+    
+</body>
+
+</html>
