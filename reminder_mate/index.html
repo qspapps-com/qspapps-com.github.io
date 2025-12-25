@@ -99,59 +99,77 @@
     </p>
     <p>
         Data is saved in gzipped JSON format when you do a backup from settings page. File has the following format
-        reminder_mate_&lt;yyyyMMdd&gt;_&lt;HHmmss&gt;.json.gz. Eg. reminder_mate_20230712_210259.json.gz.
+        remindermate_&lt;yyyyMMddHHmm&gt;.json.gz. Eg. remindermate_202307122102.json.gz.
     </p>
     <p>
-        Content is an array of json objects similar to the following.</p>
+        Content has an array of reminders and actions similar to the following.</p>
 
         <p>One-off reminder</p>
         <pre><code>
-            {
-                "title": "Take laptop backup",
-                "description": "",
-                "recurrences": [
-                    {
-                        "startTime": "3 Jul 2023 05:13 PM",
-                        "repeatInterval": 0,
-                        "intervalUnit": "none"
-                    }
-                ],
-                "reminders": [
-                    {
-                        "firstWhen": "3 Jul 2023 05:13 PM",
-                        "when": "3 Jul 2023 05:13 PM",
-                        "status": "completed"
-                    }
-                ]
-            }</code>
+        {
+            "reminders": [
+                {
+                    "id": 1,
+                    "title": "Take laptop backup",
+                    "startDateTime": "2025-12-25T09:35:00"
+                }
+            ],
+            "actions": [
+                {
+                    "reminderId": 1,
+                    "originalScheduledTime": "2025-12-25T09:35:00",
+                    "type": "COMPLETED"
+                }
+            ]
+        }    
+        </code>
         </pre>
-    <p>Recurrences have a <code>startTime</code> and an optional <code>endTime</code>. For one-off reminders, <code>repeatInterval</code> 
-    is 0 and <code>intervalUnit</code> is none. 
+    <p>Recurrences have a <code>startDateTime</code> and an optional <code>count</code>. <code>SNOOZED</code> reminders have 
+        <code>rescheduledTime</code> in their actions.
 </p>
     <p>Repeat reminders look like the below</p>
     <pre><code>
+{
+    "reminders": [
         {
-            "title": "Pick up milk",
-            "description": "",
-            "recurrences": [
-                {
-                    "startTime": "4 Jul 2023 01:00 PM",
-                    "repeatInterval": 1,
-                    "intervalUnit": "day"
-                }
-            ],
-            "reminders": [
-                {
-                    "firstWhen": "4 Jul 2023 01:00 PM",
-                    "when": "4 Jul 2023 01:00 PM",
-                    "status": "completed"
-                },    
-            ]
+            "id": 2,
+            "title": "Pickup milk",
+            "description": "Pick up milk from grocery store",
+            "startDateTime": "2025-12-25T09:35:00",
+            "recurrence": {
+                "frequency": "DAILY",
+                "interval": 2, 
+                "count": 30
+            }
+        },
+        {
+            "id": 3,
+            "title": "Go to gym",
+            "description": "Strength training thrice a week",
+            "startDateTime": "2025-12-25T18:30:00",
+            "recurrence": {
+                "frequency": "WEEKLY",
+                "daysOfWeek": [
+                    "THURSDAY",
+                    "SATURDAY",
+                    "TUESDAY"
+                ]
+            }
         }
+    ],
+    "actions": [
+        {
+            "reminderId": 2,
+            "originalScheduledTime": "2025-12-25T09:35:00",
+            "type": "SNOOZED",
+            "rescheduledTime": "2025-12-25T11:00:00"
+        }
+    ]
+}
     </code>
     </pre>
-    <code>intervalUnit</code> could be hour, minute, day, week, month or year. reminders has entry only for completed reminders or if you have snoozed
-    a reminder. <code>firstWhen</code> differs from <code>when</code> for snoozed reminders. <code>status</code> is todo, completed or deleted.
+    <code>frequency</code> could be HOUR, MINUTE, DAY, WEEK, MONTH or YEAR. reminders has entry only for completed reminders or if you have snoozed
+    a reminder. <code>originalScheduledTime</code> differs from <code>rescheduledTime</code> for snoozed reminders. <code>type</code> is SNOOZED, COMPLETED or DELETED.
     
 </body>
 
