@@ -35,6 +35,7 @@
         <li><a href="#macos">Installing on macOS</a></li>
         <li><a href="#windows">Installing on Windows</a></li>
         <li><a href="#linux">Installing on Linux and the Raspberry Pi</a></li>
+        <li><a href="#sleep">Stop the machine going to sleep</a></li>
         <li><a href="#configuration">Configuration</a></li>
         <li><a href="#external-drive">Using an external hard drive</a></li>
         <li><a href="#backup">Backing up, and recovering onto a new computer</a></li>
@@ -84,7 +85,7 @@
         <p class="meta">
             36.1 MB &middot; macOS, Windows, Linux, Raspberry Pi &middot;
             <a href="downloads/fotoloka-server-3.0.0.zip.sha256">SHA-256</a><br>
-            <code class="sha">0319f933b78527a8a0041adba5734ff7f0e4045664a5ebc7d5061c8822787ec8</code>
+            <code class="sha">b8b8f3f50d33e189ae89fd57370fb7e51f112aaed19d453c34be7ae0e46e8326</code>
         </p>
     </div>
 
@@ -126,6 +127,12 @@
     </ul>
 
     <p>Then check it: open <code>http://localhost:8080/</code> on that Mac.</p>
+
+    <p>
+        <strong>One more thing before you walk away:</strong> a sleeping Mac answers nothing. See
+        <a href="#sleep">Stop the machine going to sleep</a> &mdash; it is the difference between a
+        server that works and one that seems to work.
+    </p>
 
     <div class="table-scroll">
         <table>
@@ -172,6 +179,12 @@ launchctl load   ~/Library/LaunchAgents/com.qspapps.photobackup.plist   # start<
         <strong>Windows Firewall will ask whether to allow Java on your network the first time.</strong>
         Allow it on <em>Private</em> networks. If you say no, no phone on your Wi-Fi will find the
         server.
+    </p>
+
+    <p>
+        <strong>And before you walk away:</strong> a sleeping PC answers nothing, and its Wi-Fi adapter
+        will power itself down even when it does not. See
+        <a href="#sleep">Stop the machine going to sleep</a>.
     </p>
 
     <div class="table-scroll">
@@ -222,6 +235,164 @@ sudo ./linux/uninstall.sh      # remove it; the photos stay</code></pre>
     <p>
         The Pi advertises itself over mDNS across your router just as a laptop does, so the Android app
         finds it with nothing to configure.
+    </p>
+
+    <h2 id="sleep">Stop the machine going to sleep</h2>
+
+    <p>
+        <strong>This is the single most common reason a Fotoloka server seems unreliable.</strong> A
+        laptop that has gone to sleep answers nothing: it stops advertising itself on the network, the
+        dot in the app turns grey, and backups stall until somebody touches the keyboard. It looks
+        exactly like a broken server, and it is a sleeping one.
+    </p>
+
+    <p>The giveaway is the pattern. If any of this sounds familiar, read on:</p>
+
+    <ul>
+        <li>It works while you are sitting at the laptop, and is unreachable an hour later.</li>
+        <li>Backups only ever seem to run when you happen to open the lid.</li>
+        <li>Photos taken during the day all arrive at once in the evening.</li>
+        <li>The app finds the server the moment you wake the machine, every time.</li>
+    </ul>
+
+    <p>
+        The fix is the same everywhere &mdash; tell the machine not to sleep while it is on mains
+        power. Below is how, per platform. <strong>Leave the sleep-on-battery settings alone:</strong>
+        a server unplugged on a shelf is a flat battery, and nothing is backing up to it anyway.
+    </p>
+
+    <h3>macOS</h3>
+
+    <p>Open <strong>System Settings</strong>, then:</p>
+
+    <ul>
+        <li><strong>Battery</strong> on a laptop (<strong>Energy Saver</strong> on a Mac mini or an
+            iMac) &rarr; <strong>Options</strong>, and turn on
+            <strong>Prevent automatic sleeping on power adapter when the display is off</strong>. On a
+            desktop Mac this is simply <em>Prevent automatic sleeping when the display is off</em>.</li>
+        <li>Turn on <strong>Wake for network access</strong> in the same place. Treat it as a helper
+            rather than the fix: it depends on a Bonjour sleep proxy being present on your network, and
+            it is not dependable enough to rely on by itself.</li>
+        <li>If your library is on an external USB drive, turn <strong>off</strong> <em>Put hard disks to
+            sleep when possible</em>. A spun-down disk is not a failure &mdash; the first thumbnail is
+            just slow &mdash; but there is no reason to make the family wait.</li>
+    </ul>
+
+    <p>The same settings from a terminal, which is handy on a Mac you administer over SSH:</p>
+
+    <pre><code>sudo pmset -c sleep 0        # never sleep on mains power
+sudo pmset -c disksleep 0    # never spin the disks down on mains power
+sudo pmset -c womp 1         # wake for network access
+pmset -g custom              # check what you just set</code></pre>
+
+    <p>
+        <strong>Closing the lid sleeps a MacBook regardless of any of this.</strong> If the Mac is
+        going to live shut in a drawer, you have three choices: leave the lid open; run it in clamshell
+        mode, which needs mains power <em>and</em> an external display attached; or lift the
+        lid-close rule outright with <code>sudo pmset -b disablesleep 1</code>. That last one keeps the
+        machine awake on battery too, so use it only on a Mac that is permanently plugged in &mdash;
+        <code>sudo pmset -b disablesleep 0</code> puts it back.
+    </p>
+
+    <p>
+        To see what is putting the Mac to sleep, or holding it awake:
+        <code>pmset -g assertions</code>, and <code>pmset -g log | grep -e "Sleep " -e "Wake "</code>
+        for the history.
+    </p>
+
+    <h3>Windows</h3>
+
+    <p>Three separate settings matter, and missing any one of them leaves the server dropping out.</p>
+
+    <ol>
+        <li><strong>Sleep.</strong> Settings &rarr; System &rarr; <em>Power &amp; battery</em> (Windows
+            11) or <em>Power &amp; sleep</em> (Windows 10). Under <em>Screen and sleep</em>, set
+            <strong>When plugged in, put my device to sleep after</strong> to <strong>Never</strong>.
+            Letting the screen switch off is fine and saves more power than it sounds like.</li>
+
+        <li><strong>Hibernation.</strong> Sleep and hibernate are different timers and Windows will
+            happily hibernate a machine you told not to sleep. Control Panel &rarr; Power Options &rarr;
+            <em>Change plan settings</em> &rarr; <em>Change advanced power settings</em> &rarr;
+            <em>Sleep</em> &rarr; <strong>Hibernate after</strong> &rarr; <strong>0</strong> (never) on
+            <em>Plugged in</em>.</li>
+
+        <li><strong>The Wi-Fi adapter.</strong> This one catches people out, because the PC stays awake
+            and the server still becomes unreachable. Device Manager &rarr; <em>Network adapters</em>
+            &rarr; your Wi-Fi adapter &rarr; Properties &rarr; <strong>Power Management</strong> &rarr;
+            untick <strong>Allow the computer to turn off this device to save power</strong>.</li>
+    </ol>
+
+    <p>And, on a laptop, Control Panel &rarr; Power Options &rarr;
+        <strong>Choose what closing the lid does</strong> &rarr; <em>When plugged in</em> &rarr;
+        <strong>Do nothing</strong>.</p>
+
+    <p>The first two from an Administrator Command Prompt, if you prefer:</p>
+
+    <pre><code>powercfg /change standby-timeout-ac 0     :: never sleep on mains
+powercfg /change hibernate-timeout-ac 0   :: never hibernate on mains
+powercfg /change disk-timeout-ac 0        :: never spin the disks down
+powercfg /requests                        :: what is holding it awake right now
+powercfg /lastwake                        :: what woke it last</code></pre>
+
+    <h3>Linux and the Raspberry Pi</h3>
+
+    <p>
+        <strong>A Raspberry Pi never sleeps</strong>, which is a good part of why it makes the best
+        Fotoloka server: plug it in and it is simply always there. There is nothing to configure.
+    </p>
+
+    <p>One thing on a Pi is worth turning off, though &mdash; Wi-Fi power saving, which makes discovery
+        and the first request after an idle spell flaky:</p>
+
+    <pre><code>sudo iw dev wlan0 set power_save off        # right now
+# and to survive a reboot, on a NetworkManager system:
+sudo nmcli connection modify &lt;your-wifi&gt; wifi.powersave 2</code></pre>
+
+    <p>Better still, give the Pi a wired connection. Ethernet has no power saving to fight.</p>
+
+    <p>On a Linux <em>laptop</em> acting as the server, stop it suspending:</p>
+
+    <pre><code>sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target</code></pre>
+
+    <p>And stop the lid from triggering it &mdash; in <code>/etc/systemd/logind.conf</code>:</p>
+
+    <pre><code>HandleLidSwitch=ignore
+HandleLidSwitchExternalPower=ignore</code></pre>
+
+    <p>
+        Then <code>sudo systemctl restart systemd-logind</code>. On a GNOME desktop the session has its
+        own idle timer on top of all this, which you turn off with:
+    </p>
+
+    <pre><code>gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'</code></pre>
+
+    <h3>Checking it actually worked</h3>
+
+    <p>
+        Do not test this by walking away for two minutes. Leave the machine alone for an hour &mdash;
+        untouched, lid in whatever position it will normally be &mdash; and then, from a
+        <em>different</em> device on the Wi-Fi, open <code>http://&lt;server-ip&gt;:8080/</code>. If it
+        answers straight away, you are done. If it answers only after a pause, or not at all until you
+        touch the laptop, something is still sending it to sleep.
+    </p>
+
+    <p>
+        The server's own log is the other witness: a clean night shows continuous activity, and a
+        sleeping machine leaves an obvious hole in it.
+    </p>
+
+    <h3>Is leaving it on a problem?</h3>
+
+    <p>
+        A modern laptop sitting idle with the screen off draws a handful of watts &mdash; a few pounds
+        or dollars a year. Letting the <em>display</em> sleep costs you nothing and saves most of it;
+        it is only system sleep that has to go.
+    </p>
+
+    <p>
+        If the idea of leaving a laptop on all the time still does not appeal, this is the argument for
+        a <a href="#linux">Raspberry Pi</a>: about 3&nbsp;watts, silent, no lid, no battery, no sleep
+        settings to get wrong, and it comes straight back after a power cut.
     </p>
 
     <h2 id="configuration">Configuration</h2>
@@ -400,8 +571,13 @@ robocopy D:\PhotoBackup E:\PhotoBackup /MIR</code></pre>
     <h2 id="troubleshooting">If something is not working</h2>
 
     <dl>
+        <dt>The server works, then stops, then works again when you touch the laptop</dt>
+        <dd>The machine is going to sleep. This is the most common complaint about Fotoloka and it is
+            not the software &mdash; see <a href="#sleep">Stop the machine going to sleep</a>.</dd>
+
         <dt>The app cannot find the server</dt>
-        <dd>Check both devices are on the same Wi-Fi &mdash; a phone on 5&nbsp;GHz and a laptop on a
+        <dd>First rule out <a href="#sleep">sleep</a>, which accounts for most of these. Then check
+            both devices are on the same Wi-Fi &mdash; a phone on 5&nbsp;GHz and a laptop on a
             guest network will not see each other. On Windows, confirm Java is allowed through the
             firewall on Private networks. Then open <code>http://&lt;server-ip&gt;:8080/</code> in a
             browser on another machine: if that answers, the server is fine and the problem is
