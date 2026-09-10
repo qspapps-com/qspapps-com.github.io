@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotoloka Server Setup &ndash; QSP Apps</title>
+    <meta name="description"
+        content="How to install and configure the Fotoloka photo backup server on macOS, Windows, Linux and the Raspberry Pi.">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+</head>
+
+<body>
+    <nav class="pages">
+        <a href="../index.html">QSP Apps</a>
+        <a href="index.html">Fotoloka</a>
+        <span class="here">Server Setup</span>
+        <a href="user-guide.html">User Guide</a>
+        <a href="privacy_policy.html">Privacy Policy</a>
+    </nav>
+
+    <h1>Server setup</h1>
+
+    <p>
+        The Fotoloka server is the half that holds the photos. It runs on a computer you already own,
+        quietly in the background, and starts again on its own at every login or boot. This page takes
+        you from a downloaded zip to a working library.
+    </p>
+
+    <ul>
+        <li><a href="#requirements">What you need</a></li>
+        <li><a href="#download">Download</a></li>
+        <li><a href="#macos">Installing on macOS</a></li>
+        <li><a href="#windows">Installing on Windows</a></li>
+        <li><a href="#linux">Installing on Linux and the Raspberry Pi</a></li>
+        <li><a href="#configuration">Configuration</a></li>
+        <li><a href="#external-drive">Using an external hard drive</a></li>
+        <li><a href="#backup">Backing up, and recovering onto a new computer</a></li>
+        <li><a href="#tv">Watching albums on a Smart TV</a></li>
+        <li><a href="#troubleshooting">If something is not working</a></li>
+    </ul>
+
+    <h2 id="requirements">What you need</h2>
+
+    <ul>
+        <li><strong>A computer that stays on</strong> when the family is home &mdash; a Mac, a Windows
+            PC, a Linux box, or a Raspberry Pi. A Pi with a USB drive makes a silent, cheap server that
+            costs pennies a year to run.</li>
+        <li><strong>Java 21 or newer</strong> on that machine. There is no bundled runtime, so install
+            it first:
+            <div class="table-scroll">
+                <table>
+                    <tr>
+                        <th>macOS</th>
+                        <td><code>brew install --cask temurin@21</code>, or a <code>.pkg</code> from
+                            <a href="https://adoptium.net">adoptium.net</a></td>
+                    </tr>
+                    <tr>
+                        <th>Windows</th>
+                        <td>The Temurin 21 <code>.msi</code> from <a href="https://adoptium.net">adoptium.net</a></td>
+                    </tr>
+                    <tr>
+                        <th>Raspberry Pi / Debian</th>
+                        <td><code>sudo apt update &amp;&amp; sudo apt install -y default-jre</code></td>
+                    </tr>
+                </table>
+            </div>
+            Check it with <code>java -version</code>. The installers stop with a clear message if Java
+            is missing, so you can install it and run them again.
+        </li>
+        <li><strong>Everyone on the same Wi-Fi.</strong> Fotoloka is a home-network service; there is
+            nothing to open to the internet, and you should not.</li>
+    </ul>
+
+    <h2 id="download">Download</h2>
+
+    <div class="download">
+        <h3>Fotoloka Server 3.0.0</h3>
+        <p>
+            <a href="downloads/fotoloka-server-3.0.0.zip"><strong>fotoloka-server-3.0.0.zip</strong></a>
+        </p>
+        <p class="meta">
+            36.1 MB &middot; macOS, Windows, Linux, Raspberry Pi &middot;
+            <a href="downloads/fotoloka-server-3.0.0.zip.sha256">SHA-256</a><br>
+            <code class="sha">0319f933b78527a8a0041adba5734ff7f0e4045664a5ebc7d5061c8822787ec8</code>
+        </p>
+    </div>
+
+    <p>Inside the zip:</p>
+
+    <pre><code>fotoloka-server-3.0.0/
+  photo-backup-server-all.jar      the server itself
+  photobackup.properties.example   every setting, documented
+  README.txt                       a short version of this page
+  macos/     install.sh  uninstall.sh  and the launchd agents
+  windows/   install.bat uninstall.bat run-server.bat
+  linux/     install.sh  uninstall.sh  fotoloka.service</code></pre>
+
+    <p>
+        Verify the download if you like &mdash; <code>shasum -a 256 fotoloka-server-3.0.0.zip</code> on
+        macOS or Linux, <code>certutil -hashfile fotoloka-server-3.0.0.zip SHA256</code> on Windows
+        &mdash; and compare it with the checksum above.
+    </p>
+
+    <h2 id="macos">Installing on macOS</h2>
+
+    <p>Unpack the zip, open Terminal in the unpacked folder, and run:</p>
+
+    <pre><code>chmod +x macos/install.sh
+./macos/install.sh</code></pre>
+
+    <p>To keep the library on an external drive instead, pass the folder:</p>
+
+    <pre><code>./macos/install.sh /Volumes/MyExternalDrive/PhotoBackup</code></pre>
+
+    <p>The installer:</p>
+    <ul>
+        <li>copies the server to <code>~/Applications/FamilyPhotoBackup/</code>;</li>
+        <li>creates <code>photobackup.properties</code> there, readable only by your account;</li>
+        <li>registers a <code>launchd</code> agent at
+            <code>~/Library/LaunchAgents/com.qspapps.photobackup.plist</code> so the server starts at
+            every login;</li>
+        <li>starts it straight away.</li>
+    </ul>
+
+    <p>Then check it: open <code>http://localhost:8080/</code> on that Mac.</p>
+
+    <div class="table-scroll">
+        <table>
+            <tr><th>Photos</th><td><code>~/Pictures/FamilyPhotoBackup/</code></td></tr>
+            <tr><th>Settings</th><td><code>~/Applications/FamilyPhotoBackup/photobackup.properties</code></td></tr>
+            <tr><th>Logs</th><td><code>~/Library/Logs/FamilyPhotoBackup.log</code></td></tr>
+        </table>
+    </div>
+
+    <h3>Stopping, starting and uninstalling</h3>
+
+    <pre><code>launchctl unload ~/Library/LaunchAgents/com.qspapps.photobackup.plist   # stop
+launchctl load   ~/Library/LaunchAgents/com.qspapps.photobackup.plist   # start</code></pre>
+
+    <p>To remove it completely:</p>
+
+    <pre><code>./macos/uninstall.sh</code></pre>
+
+    <p>
+        That stops the service, deregisters it and deletes the program. <strong>Your photo library is
+        left exactly where it is</strong> &mdash; no uninstaller here deletes a photo.
+    </p>
+
+    <h2 id="windows">Installing on Windows</h2>
+
+    <p>Extract the zip, then double-click <code>windows\install.bat</code>, or from a Command Prompt:</p>
+
+    <pre><code>windows\install.bat</code></pre>
+
+    <p>To keep the library on an external drive:</p>
+
+    <pre><code>windows\install.bat D:\PhotoBackup</code></pre>
+
+    <p>The installer:</p>
+    <ul>
+        <li>copies the server to <code>%APPDATA%\FamilyPhotoBackup\</code>;</li>
+        <li>creates <code>photobackup.properties</code> there;</li>
+        <li>puts <code>FamilyPhotoBackup.bat</code> in your Startup folder, so the server launches at
+            every login;</li>
+        <li>starts it straight away.</li>
+    </ul>
+
+    <p>
+        <strong>Windows Firewall will ask whether to allow Java on your network the first time.</strong>
+        Allow it on <em>Private</em> networks. If you say no, no phone on your Wi-Fi will find the
+        server.
+    </p>
+
+    <div class="table-scroll">
+        <table>
+            <tr><th>Photos</th><td><code>%USERPROFILE%\Pictures\FamilyPhotoBackup\</code></td></tr>
+            <tr><th>Settings</th><td><code>%APPDATA%\FamilyPhotoBackup\photobackup.properties</code></td></tr>
+            <tr><th>Logs</th><td><code>%APPDATA%\FamilyPhotoBackup\server_log.log</code></td></tr>
+        </table>
+    </div>
+
+    <h3>Stopping, starting and uninstalling</h3>
+
+    <p>
+        Close the <em>FamilyPhotoBackup Server</em> window to stop it; run
+        <code>FamilyPhotoBackup.bat</code> from your Startup folder to start it again. To remove it:
+    </p>
+
+    <pre><code>windows\uninstall.bat</code></pre>
+
+    <h2 id="linux">Installing on Linux and the Raspberry Pi</h2>
+
+    <p>
+        A Raspberry Pi with an external USB drive is an excellent Fotoloka server: silent, always on,
+        and cheap to run. Mount the drive somewhere permanent first &mdash; give it an entry in
+        <code>/etc/fstab</code> so it comes back after a reboot &mdash; then:
+    </p>
+
+    <pre><code>chmod +x linux/install.sh
+sudo ./linux/install.sh /mnt/photobackup</code></pre>
+
+    <p>Leave the folder off to use <code>~/Pictures/FamilyPhotoBackup</code> instead.</p>
+
+    <p>The installer:</p>
+    <ul>
+        <li>copies the server to <code>/opt/fotoloka/</code>;</li>
+        <li>writes a <code>systemd</code> unit at <code>/etc/systemd/system/fotoloka.service</code>,
+            enabled at boot and restarted automatically if it ever stops;</li>
+        <li>runs the service as the account that invoked <code>sudo</code>, not as root, so the
+            library stays owned by a real user;</li>
+        <li>starts it straight away.</li>
+    </ul>
+
+    <pre><code>systemctl status fotoloka      # is it running?
+journalctl -u fotoloka -f      # what is it saying?
+sudo systemctl restart fotoloka
+sudo ./linux/uninstall.sh      # remove it; the photos stay</code></pre>
+
+    <p>
+        The Pi advertises itself over mDNS across your router just as a laptop does, so the Android app
+        finds it with nothing to configure.
+    </p>
+
+    <h2 id="configuration">Configuration</h2>
+
+    <p>
+        Every setting lives in one file, <code>photobackup.properties</code>, next to the installed
+        server. Edit it, restart, done &mdash; there is nothing to export on a command line. The
+        installer prints its exact path when it finishes.
+    </p>
+
+    <div class="table-scroll">
+        <table>
+            <tr><th>macOS</th><td><code>~/Applications/FamilyPhotoBackup/photobackup.properties</code></td></tr>
+            <tr><th>Windows</th><td><code>%APPDATA%\FamilyPhotoBackup\photobackup.properties</code></td></tr>
+            <tr><th>Linux / Pi</th><td><code>/opt/fotoloka/photobackup.properties</code></td></tr>
+        </table>
+    </div>
+
+    <p>
+        It arrives fully commented, with every option explained in place. Uncomment what you need:
+    </p>
+
+    <pre><code># Where your photos are kept. Point it at an external drive to keep them off the laptop.
+storage.root = /Volumes/FamilyDrive/PhotoLibrary
+
+# A password every client must present. Leave it out for no password.
+server.password = choose-something-memorable
+
+# Serve albums to a Smart TV browser. Read "Watching albums on a Smart TV" below first.
+tv.enabled = true</code></pre>
+
+    <p><strong>Restart the server after editing</strong> &mdash; the file is read once, at startup:</p>
+
+    <div class="table-scroll">
+        <table>
+            <tr><th>macOS</th>
+                <td><code>launchctl unload ~/Library/LaunchAgents/com.qspapps.photobackup.plist &amp;&amp; launchctl load ~/Library/LaunchAgents/com.qspapps.photobackup.plist</code></td></tr>
+            <tr><th>Windows</th><td>Run <code>FamilyPhotoBackup.bat</code> from your Startup folder again</td></tr>
+            <tr><th>Linux / Pi</th><td><code>sudo systemctl restart fotoloka</code></td></tr>
+        </table>
+    </div>
+
+    <h3>Checking it took effect</h3>
+
+    <p>The startup log says which file it read and what it decided:</p>
+
+    <pre><code>[Config] Loaded /Users/you/Applications/FamilyPhotoBackup/photobackup.properties
+[Config] storage.root=/Volumes/FamilyDrive/PhotoLibrary (configured), server.password=set, tv.enabled=true</code></pre>
+
+    <p>
+        If a change does not seem to have applied, look there first. Visiting
+        <code>http://&lt;server-ip&gt;:8080/</code> also shows the storage path and whether the TV page
+        is on.
+    </p>
+
+    <h3>If you set a password</h3>
+
+    <p>Keep the file to yourself &mdash; it is now a secret:</p>
+
+    <pre><code>chmod 600 ~/Applications/FamilyPhotoBackup/photobackup.properties</code></pre>
+
+    <p>
+        The installers do this for you. The server warns at startup if it holds a password and other
+        accounts on the machine can read it.
+    </p>
+
+    <h3>Environment variables</h3>
+
+    <p>
+        <code>PHOTO_BACKUP_ROOT</code>, <code>PHOTO_BACKUP_PASSWORD</code> and
+        <code>PHOTO_BACKUP_TV</code> are honoured too, and <strong>take priority over the file</strong>,
+        so an older setup that exports them keeps working unchanged. That also makes one-off runs easy:
+    </p>
+
+    <pre><code>PHOTO_BACKUP_TV=true java -jar photo-backup-server-all.jar</code></pre>
+
+    <p>
+        If you want the file to be in charge, remove those variables from wherever you set them.
+        <code>PHOTO_BACKUP_CONFIG=/path/to/file.properties</code> points the server at a config file
+        anywhere you like.
+    </p>
+
+    <h2 id="external-drive">Using an external hard drive</h2>
+
+    <p>
+        A laptop disk fills up quickly with a decade of photos. Point Fotoloka at an external USB drive
+        and the photo files, the cached thumbnails and the index database all live there instead
+        &mdash; which makes the library portable and trivially easy to back up.
+    </p>
+
+    <p>Pass the folder to the installer:</p>
+
+    <pre><code>./macos/install.sh /Volumes/MyExternalDrive/PhotoBackup      # macOS
+windows\install.bat D:\PhotoBackup                           # Windows
+sudo ./linux/install.sh /mnt/photobackup                     # Linux / Pi</code></pre>
+
+    <p>
+        That writes <code>storage.root</code> into your settings file. <strong>To move the library
+        later, edit that one line and restart</strong> &mdash; you do not have to reinstall. On macOS
+        the launch agent additionally watches the path, so the server shuts down cleanly if you unplug
+        the drive.
+    </p>
+
+    <h2 id="backup">Backing up, and recovering onto a new computer</h2>
+
+    <h3>Backing up</h3>
+
+    <p>
+        Because the database and the photo files sit in the <em>same folder</em>, cloning the whole
+        vault to a second drive is one command. Nothing needs to be shut down first &mdash; SQLite
+        copies safely while the server is running.
+    </p>
+
+    <pre><code># macOS / Linux
+rsync -avz --delete /Volumes/MyExternalDrive/PhotoBackup/ /Volumes/MySecondaryBackupDrive/PhotoBackup/
+
+# Windows
+robocopy D:\PhotoBackup E:\PhotoBackup /MIR</code></pre>
+
+    <h3>Recovering onto a new computer</h3>
+
+    <p>If the laptop dies:</p>
+
+    <ol>
+        <li>Connect the external drive to the new machine.</li>
+        <li>Install Java 21, then download and unpack this zip.</li>
+        <li>Run the installer, passing the drive folder &mdash; for example
+            <code>./macos/install.sh /Volumes/MyExternalDrive/PhotoBackup</code>.</li>
+    </ol>
+
+    <p>
+        The server finds the existing database, keeps every family member's settings, and carries on
+        serving the same photos and albums. The phones reconnect on their own.
+    </p>
+
+    <h2 id="tv">Watching albums on a Smart TV</h2>
+
+    <p>
+        The server can serve a page any television's browser can open &mdash; Samsung, LG, Android TV,
+        a Fire Stick's browser, or a laptop plugged into the HDMI port. It is <strong>off by
+        default</strong>. Turn it on in your settings file and restart:
+    </p>
+
+    <pre><code>tv.enabled = true</code></pre>
+
+    <p>
+        Then open <code>http://&lt;server-ip&gt;:8080/tv/</code> on the television, and bookmark it as
+        the browser's home page. How to drive it with the remote is in the
+        <a href="user-guide.html#tv">user guide</a>.
+    </p>
+
+    <h3>What this exposes &mdash; please read</h3>
+
+    <p>
+        This page is <strong>not password protected</strong>. That is deliberate: a TV remote is a
+        miserable way to type a password. It is bounded instead:
+    </p>
+
+    <ul>
+        <li><strong>Albums only.</strong> The TV shows the albums your family has created and nothing
+            else &mdash; no browsing the library by date, person, tag or place. <strong>A photo that is
+            not in an album cannot be reached from the TV at all</strong>, even by someone who knows its
+            filename. If you want something on the television, put it in an album; if you do not, leave
+            it out of one.</li>
+        <li><strong>Read-only.</strong> Nothing on the TV page can delete, change or upload anything.</li>
+        <li><strong>Off unless you turn it on</strong>, and turning it on does not weaken the app's API
+            &mdash; that stays behind <code>server.password</code> if you have set one.</li>
+    </ul>
+
+    <p>
+        The practical effect: while it is enabled, anyone on your home Wi-Fi can view your shared albums
+        without a password. On a household network that is the whole point. If guests share your Wi-Fi
+        and that concerns you, leave it off, or put the TV on a guest-isolated network.
+    </p>
+
+    <h2 id="troubleshooting">If something is not working</h2>
+
+    <dl>
+        <dt>The app cannot find the server</dt>
+        <dd>Check both devices are on the same Wi-Fi &mdash; a phone on 5&nbsp;GHz and a laptop on a
+            guest network will not see each other. On Windows, confirm Java is allowed through the
+            firewall on Private networks. Then open <code>http://&lt;server-ip&gt;:8080/</code> in a
+            browser on another machine: if that answers, the server is fine and the problem is
+            discovery, so tap the status dot in the app to retry.</dd>
+
+        <dt>A setting seems to be ignored</dt>
+        <dd>Restart the server &mdash; the file is read once, at startup. Then read the
+            <code>[Config]</code> lines in the log, which name the file that was loaded. An environment
+            variable set somewhere else overrides the file.</dd>
+
+        <dt>The server will not start</dt>
+        <dd>Read the log. The usual causes are no Java on the machine, or something else already
+            listening on port 8080 &mdash; often a second copy of Fotoloka.</dd>
+
+        <dt>On macOS, it works in Terminal but not at login</dt>
+        <dd>The launch agent calls <code>/usr/bin/java</code>, which resolves to a JDK registered with
+            the system. A Java installed only on your shell's <code>PATH</code> is invisible to it.
+            Install a system JDK &mdash; a <code>.pkg</code>, or
+            <code>brew install --cask temurin@21</code> &mdash; and run the installer again.</dd>
+
+        <dt>A video will not play in the browser</dt>
+        <dd>That is your browser, not Fotoloka. The server streams your file exactly as recorded and
+            never re-encodes it, so a clip plays only if the browser can decode it. Recent iPhones and
+            many Android phones record HEVC (H.265), which desktop Chrome and Firefox generally will not
+            play; Safari usually will, and the Android app always will. Set your camera to its "most
+            compatible" / H.264 option if you want playback everywhere.</dd>
+    </dl>
+
+    <footer class="site">
+        <p>
+            <a href="index.html">Back to Fotoloka</a> &middot;
+            For support contact <img src="../support.png" alt="Support Email">
+        </p>
+    </footer>
+</body>
+
+</html>

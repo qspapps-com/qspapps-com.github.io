@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotoloka Privacy Policy &ndash; QSP Apps</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+</head>
+
+<body>
+    <nav class="pages">
+        <a href="../index.html">QSP Apps</a>
+        <a href="index.html">Fotoloka</a>
+        <a href="server-setup.html">Server Setup</a>
+        <a href="user-guide.html">User Guide</a>
+        <span class="here">Privacy Policy</span>
+    </nav>
+
+    <h1>Privacy Policy for Fotoloka</h1>
+
+    <p><strong>Last updated: 9 September 2026</strong></p>
+
+    <p>
+        Fotoloka is a photo and video backup app for Android. It backs your media up to a Fotoloka
+        server that <strong>you</strong> install and run on your own computer, on your own home
+        network.
+    </p>
+
+    <p>
+        The short version: <strong>we operate no servers and receive none of your data.</strong> There
+        is no Fotoloka cloud, no account, no analytics and no advertising. Your photos go from your
+        phone to your computer and nowhere else.
+    </p>
+
+    <hr>
+
+    <h2>1. Who this policy is for</h2>
+
+    <p>
+        This policy covers the Fotoloka Android application (<code>com.qspapps.photobackup</code>).
+    </p>
+
+    <p>
+        Because Fotoloka is self-hosted, <strong>you are the operator of the server that holds your
+        data.</strong> This policy describes what the app does. What happens to the data once it
+        reaches your own computer is under your control, not ours.
+    </p>
+
+    <h2>2. Information the app collects and sends to us</h2>
+
+    <p>
+        <strong>None.</strong> The app contains no analytics, crash-reporting, advertising or tracking
+        libraries of any kind. It does not create an account, does not identify you to us, and makes no
+        network request to any server operated by the developer.
+    </p>
+
+    <h2>3. Information the app sends to your own server</h2>
+
+    <p>
+        When you use Fotoloka, the app sends the following to the Fotoloka server running on your
+        computer, over your local network:
+    </p>
+
+    <ul>
+        <li><strong>Your photos and videos</strong>, when backup is on or when you upload them.</li>
+        <li><strong>The metadata embedded in those files</strong> by the camera that took them. This
+            includes the capture date and time, the camera model, and &mdash; if your camera recorded it
+            &mdash; <strong>the GPS coordinates of where the photo was taken.</strong> This is metadata
+            already inside your photo files; Fotoloka carries it across so that dates and places stay
+            correct, and does not add any.</li>
+        <li><strong>The profile name you are using</strong>, so a shared household library can show who
+            added or changed what.</li>
+        <li><strong>Tags, favourites, album membership and similar organising information</strong> that
+            you create in the app.</li>
+        <li><strong>Your server password</strong>, if you have set one, to authenticate each
+            request.</li>
+    </ul>
+
+    <p>
+        This traffic goes to an address on your own network. The app refuses to send unencrypted traffic
+        anywhere else: a built-in check rejects any cleartext request to a host outside private
+        (RFC&nbsp;1918), loopback, link-local or <code>.local</code> addresses.
+    </p>
+
+    <h2>4. Information stored on your phone</h2>
+
+    <p>The app stores the following on your device only:</p>
+
+    <ul>
+        <li>The address of your server, and the name of the Wi-Fi network you chose as your home
+            network.</li>
+        <li>The profile you are currently using.</li>
+        <li>Your server password, if you set one.</li>
+        <li>A cache of your library &mdash; photo records, and thumbnail images &mdash; so the app works
+            when the server is unreachable.</li>
+    </ul>
+
+    <p>
+        <strong>Please note:</strong> the server password is stored in the app's private storage using
+        Android's standard preferences, which is protected by the operating system's app sandbox and by
+        device encryption, but is <strong>not</strong> additionally encrypted by the app. Treat your
+        server password as you would any password stored on a device.
+    </p>
+
+    <p>
+        Uninstalling the app removes all of the above from your phone. It does not remove anything from
+        your own server.
+    </p>
+
+    <h2>5. Permissions, and why each is needed</h2>
+
+    <ul>
+        <li><strong>Photos and videos</strong> (<code>READ_MEDIA_IMAGES</code>,
+            <code>READ_MEDIA_VIDEO</code>, <code>READ_MEDIA_VISUAL_USER_SELECTED</code>, and on older
+            Android versions <code>READ_EXTERNAL_STORAGE</code>): to find media that needs backing up and
+            to display your library. If you grant limited access, only the items you select are visible
+            to the app.</li>
+        <li><strong>Location</strong> (<code>ACCESS_FINE_LOCATION</code>,
+            <code>ACCESS_COARSE_LOCATION</code>): <strong>used only to read the name of the Wi-Fi network
+            your phone is currently connected to.</strong> Android requires a location permission before
+            an app may read a network name; there is no narrower permission that allows it. Fotoloka uses
+            this to run backup only on your home network, and not on mobile data or on a public network.
+            <strong>The app never requests, receives, records or transmits your geographic
+            location.</strong> The only thing kept is the name of the network you chose as your home
+            network, stored on your phone. If you decline this permission the app still works; the
+            home-network restriction simply cannot be enforced.</li>
+        <li><strong>Network access</strong> (<code>INTERNET</code>, <code>ACCESS_NETWORK_STATE</code>,
+            <code>ACCESS_WIFI_STATE</code>, <code>CHANGE_WIFI_MULTICAST_STATE</code>): to reach your
+            server and to find it on your network automatically, which uses multicast discovery.</li>
+    </ul>
+
+    <h2>6. Sharing with third parties</h2>
+
+    <p>
+        Fotoloka does not share your data with anyone. There are no third-party services, no data
+        brokers, no advertising partners and no sale of personal information.
+    </p>
+
+    <p>
+        If you use the app's Share action to send a photo to another app you have chosen, that photo
+        leaves Fotoloka and is then handled by that app under its own policy.
+    </p>
+
+    <h2>7. Children</h2>
+
+    <p>
+        Fotoloka is a general-purpose tool and is not directed at children. It collects nothing from
+        anyone, including children.
+    </p>
+
+    <h2>8. Your data, your control</h2>
+
+    <p>
+        Because nothing reaches us, there is nothing for us to disclose, correct or delete on your
+        behalf. You can:
+    </p>
+
+    <ul>
+        <li>Delete photos in the app, which moves them to Trash on your server and purges them after 30
+            days, or delete them immediately from Trash.</li>
+        <li>Uninstall the app to remove everything it stored on your phone.</li>
+        <li>Stop or delete your server, which removes the library entirely.</li>
+    </ul>
+
+    <h2>9. Security</h2>
+
+    <p>
+        Traffic between the app and your server travels over your local network. On a home network
+        without a certificate this is unencrypted HTTP, which is why the app refuses to send cleartext
+        to anything outside your local network. You can set a password on your server so that only your
+        household can reach it.
+    </p>
+
+    <p>
+        The security of the computer running your server, and of your home network, is your
+        responsibility.
+    </p>
+
+    <h2>10. Changes to this policy</h2>
+
+    <p>
+        If this policy changes, the date at the top will change with it, and the revised version will be
+        published at this address.
+    </p>
+
+    <h2>11. Contact</h2>
+
+    <p>Questions about this policy: <strong>support@qspapps.com</strong></p>
+
+    <footer class="site">
+        <p><a href="index.html">Back to Fotoloka</a></p>
+    </footer>
+</body>
+
+</html>

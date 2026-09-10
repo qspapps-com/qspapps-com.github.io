@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotoloka User Guide &ndash; QSP Apps</title>
+    <meta name="description"
+        content="How to use Fotoloka: the Android app, the browser client, and albums on a Smart TV.">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+</head>
+
+<body>
+    <nav class="pages">
+        <a href="../index.html">QSP Apps</a>
+        <a href="index.html">Fotoloka</a>
+        <a href="server-setup.html">Server Setup</a>
+        <span class="here">User Guide</span>
+        <a href="privacy_policy.html">Privacy Policy</a>
+    </nav>
+
+    <h1>User guide</h1>
+
+    <p>
+        This page assumes the server is already running &mdash; if it is not, start with the
+        <a href="server-setup.html">server setup guide</a>. There are three ways to use Fotoloka, and
+        you can mix them freely in one household:
+    </p>
+
+    <ul>
+        <li><a href="#android">The Android app</a> &mdash; automatic camera-roll backup, and the
+            fastest way to browse from a phone.</li>
+        <li><a href="#browser">Any browser</a> &mdash; the complete client, on a laptop, an iPad or an
+            iPhone. Nothing to install.</li>
+        <li><a href="#tv">A Smart TV</a> &mdash; shared albums on the big screen, driven by the
+            remote.</li>
+    </ul>
+
+    <p>
+        Everything below happens on your home Wi-Fi. There is nothing to sign up for and no password
+        unless you chose to set one on the server.
+    </p>
+
+    <h2 id="android">The Android app</h2>
+
+    <p class="placeholder">
+        The Play Store listing is not live yet. This page will carry the link as soon as it is.
+        <!-- Replace with:
+             <a href="https://play.google.com/store/apps/details?id=com.qspapps.photobackup">Playstore Link</a> -->
+    </p>
+
+    <h3>First run</h3>
+
+    <ol>
+        <li>Open the app while connected to your home Wi-Fi.</li>
+        <li>It <strong>finds the server by itself</strong>. A green dot in the top bar means connected,
+            grey means not &mdash; tap it to retry.</li>
+        <li>If the server has a password, the app asks for it, and checks it before saving.</li>
+    </ol>
+
+    <h3>Getting around</h3>
+
+    <p>
+        Every screen is reached from the <strong>hamburger menu</strong> in the top bar: Gallery,
+        Albums, Recent Activity, Trash and Sync Settings. There is deliberately no bottom bar &mdash;
+        in a photo browser those pixels are better spent on photos.
+    </p>
+
+    <p>
+        Filtering is the exception. It acts on the gallery, so it lives on the <strong>filter
+        icon</strong> in the gallery's own top bar: a Year&nbsp;&rarr;&nbsp;Month&nbsp;&rarr;&nbsp;Day
+        drill-down, your tags, and a photos/videos switch. The icon fills in while a filter is active,
+        so the gallery always tells you whether you are seeing everything.
+    </p>
+
+    <h3>Family members</h3>
+
+    <p>
+        Tap the <strong>initials avatar</strong> at the top-right of the gallery. The menu lists
+        everyone in the household &mdash; switch to one to browse their timeline &mdash; and is also
+        where you register a new person, rename the one you are on, or delete it.
+    </p>
+
+    <ul>
+        <li>A profile is just a name. Spaces, capitals and accents are all fine, and renaming moves
+            nothing on the server.</li>
+        <li>Deleting works only while a profile holds no photos or videos, <em>including anything still
+            in its trash</em> or waiting in its import folder. If it still holds something, the app says
+            how much and nothing is deleted. Its entries in Recent Activity are kept either way.</li>
+    </ul>
+
+    <h3>Setting up the home Wi-Fi lock</h3>
+
+    <ol>
+        <li>Open <strong>Sync Settings</strong> from the menu.</li>
+        <li>Under <em>Home Wi-Fi lock</em>, tap <strong>Set home network</strong> and enter your network
+            name, for example <code>MyHomeWiFi</code>.</li>
+        <li>Automatic backup and server discovery then run only on that network, which is what keeps the
+            app from draining the battery hunting for a server while you are out. Leave it blank to
+            allow any network.</li>
+    </ol>
+
+    <p>
+        Granting the location permission is what lets Android tell the app which network it is on;
+        without it the lock cannot be enforced and backup proceeds anyway.
+    </p>
+
+    <h3>Reclaiming space on the phone</h3>
+
+    <ol>
+        <li>In <strong>Sync Settings</strong>, tap <strong>Check for reclaimable space</strong>. The
+            server has to be reachable.</li>
+        <li>The app asks the server which photos it holds, and offers to remove only those local copies
+            &mdash; a live question, never a guess from its own cache, so it will not delete your only
+            copy of anything.</li>
+        <li>On Android 11 and later the system shows its own confirmation before anything goes.</li>
+    </ol>
+
+    <h3>Importing photos from an external drive</h3>
+
+    <ol>
+        <li>On the server machine, copy folders of old photos into
+            <code>Pictures/FamilyPhotoBackup/import/&lt;your name&gt;/</code>. The folder is named after
+            your profile, so look for your own name.</li>
+        <li>In <strong>Sync Settings</strong>, tap <strong>Scan import folder</strong>.</li>
+        <li>The server walks the folders recursively, reads the EXIF, and files everything into the
+            library by date.</li>
+    </ol>
+
+    <h3>Recent activity</h3>
+
+    <p>
+        Open <strong>Recent Activity</strong> from the menu for a chronological log of every write
+        anyone has made on the server &mdash; uploads, deletions, tags, album changes &mdash; each with
+        the person's name, a description and a timestamp.
+    </p>
+
+    <h3>Slideshow</h3>
+
+    <p>
+        Hit play in the gallery's top bar and whatever you are looking at becomes a full-screen
+        slideshow: your whole library, or just the tag, year or album you narrowed it to. Albums can
+        also be played straight from the album list.
+    </p>
+
+    <ul>
+        <li>Every photo appears once before any repeats, then the order reshuffles.</li>
+        <li>Speeds of 3, 5, 8 or 15 seconds, with skip and pause. The screen stays awake while it
+            plays.</li>
+        <li><strong>Pause on a photo</strong> and you get the viewer's actions &mdash; details, add a
+            tag, share, download, remove from album, move to trash &mdash; with anything trashed or
+            removed dropping out of the running show.</li>
+        <li>It plays the <em>whole</em> feed on the server, not only what your phone has synced, so a
+            shared album plays everyone's photos. If the server is unreachable it plays what the phone
+            has cached and tells you that is what it is doing.</li>
+        <li>Videos are skipped: a slideshow runs on a timer and a clip does not.</li>
+    </ul>
+
+    <h3>Browsing with the server off</h3>
+
+    <p>
+        With the server switched off, the gallery, the filters, the date drill-down and the albums all
+        keep working from the phone's cache. Only <em>changes</em> &mdash; deleting, tagging, album
+        edits &mdash; need the server, and the app says so when you try.
+    </p>
+
+    <h2 id="browser">Using it from any browser</h2>
+
+    <p>
+        Open <strong><code>http://&lt;server-ip&gt;:8080/app/</code></strong> on any machine on the home
+        Wi-Fi &mdash; a laptop, an iPad, an iPhone, a desktop. Nothing to install.
+    </p>
+
+    <p>
+        <strong>This is the full application, not a viewer.</strong> If nobody in the house has an
+        Android phone, this is Fotoloka.
+    </p>
+
+    <ol>
+        <li><strong>First visit.</strong> If the server has a password, it asks once and remembers it in
+            that browser. On a brand-new server it offers to add the first family member, so a household
+            can set itself up here without ever touching the app.</li>
+
+        <li><strong>Getting around.</strong> The hamburger menu holds Gallery, Favourites, Albums, Trash
+            and Import folder. The gallery's top bar carries slideshow, sort, filter and the profile
+            avatar &mdash; the same order and the same icons as the Android app, so the two are one
+            thing to learn.</li>
+
+        <li><strong>Filtering.</strong> The filter icon opens media type, a
+            Year&nbsp;&rarr;&nbsp;Month&nbsp;&rarr;&nbsp;Day drill-down and your tags. What is applied
+            appears as removable chips under the bar. Picking a tag or a date shows it oldest-first, as
+            on the phone; clearing puts the ordering back.</li>
+
+        <li><strong>The big screen.</strong> The slideshow button plays whatever is on screen &mdash;
+            the whole library, one year, one tag, one album. Space pauses, arrow keys step, Escape
+            leaves, and the speed control offers the same four durations as the app. This is what the
+            browser client was built for: a photograph at a size worth looking at.</li>
+
+        <li><strong>Selecting photos.</strong> Every tile has a circle in its corner. Pick some and the
+            top bar becomes a selection bar with <em>Favourite</em>, <em>Album</em>, <em>Tag</em> and
+            <em>Trash</em> &mdash; plus <em>Un-album</em> and <em>Cover</em> while you are inside an
+            album.</li>
+
+        <li><strong>One photo.</strong> Click a tile for full screen, where you can favourite it, tag
+            it, change the date taken, or trash it. Your own tags are listed along the bottom and each
+            can be clicked off.</li>
+
+        <li><strong>Videos play here too.</strong> Open a clip and press play, and it plays with your
+            browser's own controls &mdash; pause, seek, volume, full screen.
+            <p>
+                One limit is worth knowing, and it is your browser's rather than Fotoloka's: the server
+                streams your file exactly as recorded and never re-encodes it, so a clip plays only if
+                the browser can decode it. <strong>Recent iPhones and many Android phones record HEVC
+                (H.265), which desktop Chrome and Firefox generally will not play</strong> &mdash; the
+                clip downloads and then refuses, and the page tells you that is what happened. Safari
+                usually plays HEVC; the Android app always does, because the phone decodes it in
+                hardware. Anything recorded as H.264/AVC plays everywhere. Set your phone's camera to
+                its "most compatible" / H.264 option if you want browser playback for everything.
+            </p>
+        </li>
+
+        <li><strong>Albums with several contributors</strong> get a contributor filter in the top bar
+            naming everyone who has added photos, so you can see just one person's. It appears only when
+            more than one family member has contributed &mdash; with one, there is nothing to
+            narrow.</li>
+
+        <li><strong>Adding photos from this machine.</strong> The <code>+</code> button opens the file
+            chooser and uploads what you pick, with progress under the bar. Keep browsing while it
+            runs.</li>
+
+        <li><strong>Adding photos already on the server.</strong> <em>Import folder</em> in the menu
+            names your own drop folder &mdash; <code>import/Naveen/</code>, say &mdash; so you can copy
+            a decade of holidays off an external drive straight into it and press <strong>Scan
+            now</strong>. The server does the work; this only asks it to start and reports what it
+            found.</li>
+
+        <li><strong>Trash</strong> is kept 30 days. Select and put back, or delete for good.
+            <em>Empty trash</em> removes everything and cannot be undone.</li>
+
+        <li><strong>Family members.</strong> The avatar at the top-right switches between them, and
+            adds, renames or deletes them. Renaming moves nothing &mdash; photos, albums and the import
+            folder stay exactly where they are.</li>
+    </ol>
+
+    <p>
+        <strong>What is not here, and why:</strong> automatic camera-roll backup. That needs software
+        running in the background on the phone that holds the photos, which a web page cannot be. Upload
+        from a browser is deliberate &mdash; you choose the files. Everything else the Android app does,
+        this does.
+    </p>
+
+    <p>
+        <strong>A note on the password:</strong> the browser client is behind the same password as every
+        other client, and it stores that password in the browser it was typed into. On a shared
+        computer, use a private window.
+    </p>
+
+    <h2 id="tv">Albums on a Smart TV</h2>
+
+    <p>
+        Turn the server into a photo frame for the living room. Any television's browser can open
+        <code>http://&lt;server-ip&gt;:8080/tv/</code> &mdash; Samsung, LG, Android TV, a Fire Stick's
+        browser, or a laptop plugged into the HDMI port. Most sets let you bookmark that as the
+        browser's home page, so the family only ever has to open the browser.
+    </p>
+
+    <p>
+        It is <strong>off by default</strong>. See
+        <a href="server-setup.html#tv">Watching albums on a Smart TV</a> for how to switch it on, and
+        for what it exposes &mdash; that page is deliberately not password protected, and it is worth
+        two minutes of your time before you enable it.
+    </p>
+
+    <h3>Using the remote</h3>
+
+    <div class="table-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>Button</th>
+                    <th>Album list &amp; album view</th>
+                    <th>Slideshow</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Arrows</td>
+                    <td>Move the highlight</td>
+                    <td>&#9664; &#9654; skip &middot; &#9650; caption on/off &middot; &#9660; change speed</td>
+                </tr>
+                <tr>
+                    <td>OK</td>
+                    <td>Open the album / play from here</td>
+                    <td>Pause and resume</td>
+                </tr>
+                <tr>
+                    <td>Back</td>
+                    <td>Go up a level</td>
+                    <td>Leave the slideshow</td>
+                </tr>
+                <tr>
+                    <td>Red (or <code>r</code>)</td>
+                    <td>Start the shuffle of every album</td>
+                    <td>Shuffle on/off</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p>
+        The album list leads with <strong>Shuffle all albums</strong> &mdash; random photos from every
+        album at once, for when you just want the photos on rather than a particular album. The Red
+        button starts it from anywhere on that list.
+    </p>
+
+    <h3>What it looks like</h3>
+
+    <ul>
+        <li>Slides advance on their own at 3, 5, 8 or 15 seconds, crossfade, and loop at the end, so it
+            can be left running all evening.</li>
+        <li>Photos are never cropped. The space a photo does not fill is a softly blurred wash of the
+            photo itself rather than a black bar.</li>
+        <li>Each slide is captioned in the top corner with the album, the date and who added it &mdash;
+            <em>Goa: on 1 May 2024 by mom</em> &mdash; which &#9650; turns off.</li>
+        <li>Videos play with sound, and the show moves on when the clip finishes.</li>
+        <li>Your speed, shuffle and caption choices are remembered on that television.</li>
+    </ul>
+
+    <footer class="site">
+        <p>
+            <a href="index.html">Back to Fotoloka</a> &middot;
+            For support contact <img src="../support.png" alt="Support Email">
+        </p>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotoloka &ndash; QSP Apps</title>
+    <meta name="description"
+        content="Fotoloka is a self-hosted photo and video backup service for your home network. Your laptop is the server; nothing leaves your Wi-Fi.">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+</head>
+
+<body>
+    <nav class="pages">
+        <a href="../index.html">QSP Apps</a>
+        <span class="here">Fotoloka</span>
+        <a href="server-setup.html">Server Setup</a>
+        <a href="user-guide.html">User Guide</a>
+        <a href="privacy_policy.html">Privacy Policy</a>
+    </nav>
+
+    <h1>Fotoloka</h1>
+
+    <p>
+        <strong>Your photos, on your own network.</strong> Fotoloka is a self-hosted photo and video
+        backup service. A Mac, a Windows PC or a Raspberry Pi in your home becomes the place your
+        family's photos live &mdash; a central, private library with no cloud subscription behind it.
+        Phones back up over Wi-Fi automatically; any browser in the house can browse the whole
+        collection.
+    </p>
+
+    <p>
+        Nothing is uploaded to us. There is no Fotoloka cloud, no account and no analytics. Your
+        photos go from your phone to your computer and nowhere else.
+    </p>
+
+    <ul>
+        <li><span class="placeholder">Play Store link &mdash; coming soon</span>
+            <!-- Replace with:
+                 <a href="https://play.google.com/store/apps/details?id=com.qspapps.photobackup">Playstore Link</a>
+                 once the listing is live. -->
+        </li>
+        <li><a href="server-setup.html">Server setup guide</a> &mdash; install it on your computer</li>
+        <li><a href="user-guide.html">User guide</a> &mdash; the app, the browser client and the TV</li>
+        <li><a href="privacy_policy.html">Privacy policy</a></li>
+    </ul>
+
+    <h2>How it works</h2>
+
+    <p>
+        Fotoloka has two halves. The <strong>server</strong> runs on a computer you already own and
+        holds the library. The <strong>clients</strong> &mdash; the Android app, and a browser client
+        the server hosts itself &mdash; talk to it over your home Wi-Fi.
+    </p>
+
+    <ol>
+        <li><strong>Install the server</strong> on the machine that will keep the photos. It runs
+            quietly in the background and starts again by itself at every login.</li>
+        <li><strong>Point it at a disk.</strong> The laptop's own drive to begin with, or an external
+            USB drive if your library is bigger than your laptop.</li>
+        <li><strong>Open a client.</strong> The Android app finds the server on your Wi-Fi by itself
+            &mdash; no IP addresses to type. From any other device, open
+            <code>http://&lt;server-ip&gt;:8080/app/</code> in a browser.</li>
+    </ol>
+
+    <p>
+        The server needs a Java runtime, version 21 or newer. Everything else is in the download.
+    </p>
+
+    <h2>Download the server</h2>
+
+    <div class="download">
+        <h3>Fotoloka Server 3.0.0</h3>
+        <p>
+            One download for every platform &mdash; macOS, Windows, Linux and the Raspberry Pi &mdash;
+            with an installer for each. Unpack it, run the installer for your machine, and the server
+            is up.
+        </p>
+        <p>
+            <a href="downloads/fotoloka-server-3.0.0.zip"><strong>Download fotoloka-server-3.0.0.zip</strong></a>
+        </p>
+        <p class="meta">
+            36.1 MB &middot; requires Java 21 or newer &middot;
+            <a href="downloads/fotoloka-server-3.0.0.zip.sha256">SHA-256</a><br>
+            <code class="sha">0319f933b78527a8a0041adba5734ff7f0e4045664a5ebc7d5061c8822787ec8</code>
+        </p>
+    </div>
+
+    <p>
+        Step-by-step instructions for each platform, including how to keep the library on an external
+        drive, are in the <a href="server-setup.html">server setup guide</a>.
+    </p>
+
+    <h2>The Android app</h2>
+
+    <p>
+        The app backs up your camera roll in the background whenever you are on your home Wi-Fi, and
+        is the fastest way to browse the library from a phone.
+    </p>
+
+    <p class="placeholder">
+        The Play Store listing is not live yet. This page will carry the link as soon as it is.
+    </p>
+
+    <p>
+        You do not need it. The browser client the server hosts is a complete client, so a household
+        on iPhones &mdash; or one that would simply rather not install anything &mdash; can run
+        Fotoloka entirely from a browser. The one thing only the app can do is automatic camera-roll
+        backup, which needs software running on the phone that holds the photos.
+    </p>
+
+    <h2>What it does</h2>
+
+    <h3>Backup that looks after itself</h3>
+    <dl>
+        <dt>Auto-discovery</dt>
+        <dd>The app resolves your computer's address on your home Wi-Fi by itself, over mDNS/Bonjour.
+            There is no IP address to copy or type, and it keeps working when your router hands the
+            machine a different one.</dd>
+
+        <dt>Home Wi-Fi lock</dt>
+        <dd>Background backup and server discovery run only on the network you nominate, so nothing
+            drains the battery hunting for a server while you are out.</dd>
+
+        <dt>HEIC converted on the phone</dt>
+        <dd>iPhone-style HEIC/HEIF images are converted to high-quality JPEG before upload, carrying
+            the EXIF across &mdash; capture date, GPS and camera model &mdash; so dates and places
+            survive the trip.</dd>
+
+        <dt>Free up space, safely</dt>
+        <dd>Reclaim phone storage by removing local copies of photos the server confirms it holds.
+            The check is a live question put to the server, never a guess from the app's own cache,
+            so it will not delete your only copy.</dd>
+
+        <dt>Import from an external drive</dt>
+        <dd>Copy folders of old photos straight into the server's import folder. It scans them,
+            reads the EXIF, files them by date, builds thumbnails and indexes the lot.</dd>
+    </dl>
+
+    <h3>Browsing</h3>
+    <dl>
+        <dt>A chronological timeline</dt>
+        <dd>Opens straight into a continuous grid of everything, newest first, with date headers.</dd>
+
+        <dt>Filters that drill down</dt>
+        <dd>Narrow by year, then month, then day, alongside your own tags and a photos/videos switch.
+            The filter icon fills in while a filter is on, so the gallery always says whether you are
+            seeing everything.</dd>
+
+        <dt>Shared trip albums</dt>
+        <dd>Albums cut across family members. Everyone adds their own photos to the same album, and
+            it plays back as one timeline with each contributor named.</dd>
+
+        <dt>Slideshow</dt>
+        <dd>Play whatever is on screen &mdash; the whole library, one year, one tag, one album &mdash;
+            full screen, at 3, 5, 8 or 15 seconds a photo. Every photo appears once before any
+            repeats. Pause on a photo and you get the same actions as the viewer.</dd>
+
+        <dt>Video, streamed over the LAN</dt>
+        <dd>MP4, MOV, MKV, AVI, 3GP and WebM back up, sync and play across the house.</dd>
+
+        <dt>Works offline</dt>
+        <dd>With the server switched off, the gallery, the filters and the albums keep working from
+            the phone's cache. Only changes need the server, and the app says so when you try.</dd>
+    </dl>
+
+    <h3>Living with it</h3>
+    <dl>
+        <dt>A browser client, not a preview</dt>
+        <dd><code>http://&lt;server-ip&gt;:8080/app/</code> on any computer, tablet or phone gives you
+            the whole application: browse, filter, slideshow, upload, tag, albums, trash and family
+            members. Nothing to install.</dd>
+
+        <dt>Albums on the television</dt>
+        <dd>Open <code>http://&lt;server-ip&gt;:8080/tv/</code> in a Smart TV's own browser and your
+            shared albums appear on the big screen, driven entirely by the remote. Off by default.</dd>
+
+        <dt>Trash with 30 days to change your mind</dt>
+        <dd>Deleting moves a photo to Trash with a countdown, and it can be restored at any point
+            before the server purges it. Deleting on the server never touches the copy on your phone.</dd>
+
+        <dt>Recent activity</dt>
+        <dd>Every write &mdash; upload, deletion, tag, album change &mdash; is logged with who did it
+            and when, and shown as a chronological list.</dd>
+
+        <dt>Optional password</dt>
+        <dd>Set one on the server and every client must present it.</dd>
+    </dl>
+
+    <h2>Your data stays yours</h2>
+
+    <p>
+        The photo files, the thumbnails and the index database all live in <em>one folder</em> that
+        you choose. That makes a backup a single command:
+    </p>
+
+    <pre><code>rsync -avz --delete /Volumes/MyDrive/PhotoBackup/ /Volumes/BackupDrive/PhotoBackup/</code></pre>
+
+    <p>
+        And it makes moving to a new computer a matter of plugging the drive in and running the
+        installer again &mdash; the server finds the existing library and carries on. The
+        <a href="server-setup.html#backup">server setup guide</a> covers backup and disaster recovery
+        in full.
+    </p>
+
+    <footer class="site">
+        <p>
+            Fotoloka is made by <a href="../index.html">QSP Apps</a>.
+            For support contact <img src="../support.png" alt="Support Email">
+        </p>
+    </footer>
+</body>
+
+</html>
