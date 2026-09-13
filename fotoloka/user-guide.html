@@ -133,6 +133,27 @@
             library by date.</li>
     </ol>
 
+    <h3>Importing from Google Photos</h3>
+
+    <p>
+        If you downloaded your Google Photos library with Google Takeout (.zip archives), the server
+        download includes a helper script, <code>extract_takeout_media.py</code>, to extract all media
+        directly into your profile's import folder. It preserves albums, maintains original timestamps,
+        converts Pixel motion photos (<code>.mp</code>) to <code>.mp4</code>, and skips duplicates:
+    </p>
+
+    <pre><code># macOS / Linux
+python3 extract_takeout_media.py &lt;takeout-zips-folder&gt; Pictures/FamilyPhotoBackup/import/&lt;your-name&gt;
+
+# Windows
+python extract_takeout_media.py &lt;takeout-zips-folder&gt; %USERPROFILE%\Pictures\FamilyPhotoBackup\import\&lt;your-name&gt;</code></pre>
+
+    <p>
+        Once extracted, open the app and tap <strong>Scan import folder</strong> in
+        <strong>Sync Settings</strong>. See the <a href="server-setup.html#google-photos">server setup
+        guide</a> for details.
+    </p>
+
     <h3>Recent activity</h3>
 
     <p>

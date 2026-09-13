@@ -38,6 +38,7 @@
         <li><a href="#sleep">Stop the machine going to sleep</a></li>
         <li><a href="#configuration">Configuration</a></li>
         <li><a href="#external-drive">Using an external hard drive</a></li>
+        <li><a href="#google-photos">Importing from Google Photos</a></li>
         <li><a href="#backup">Backing up, and recovering onto a new computer</a></li>
         <li><a href="#tv">Watching albums on a Smart TV</a></li>
         <li><a href="#troubleshooting">If something is not working</a></li>
@@ -78,30 +79,31 @@
     <h2 id="download">Download</h2>
 
     <div class="download">
-        <h3>Fotoloka Server 3.0.1</h3>
+        <h3>Fotoloka Server 3.0.2</h3>
         <p>
-            <a href="downloads/fotoloka-server-3.0.1.zip"><strong>fotoloka-server-3.0.1.zip</strong></a>
+            <a href="downloads/fotoloka-server-3.0.2.zip"><strong>fotoloka-server-3.0.2.zip</strong></a>
         </p>
         <p class="meta">
             36.2 MB &middot; macOS, Windows, Linux, Raspberry Pi &middot;
-            <a href="downloads/fotoloka-server-3.0.1.zip.sha256">SHA-256</a><br>
-            <code class="sha">425efddab674b511667e7b9546fb857f34b68c8aae401bf1d3f9b2fbeaac8dee</code>
+            <a href="downloads/fotoloka-server-3.0.2.zip.sha256">SHA-256</a><br>
+            <code class="sha">478801acd1242795c3ce287d990a9517304a4ec809801f02891557b010cfc9a2</code>
         </p>
     </div>
 
     <p>Inside the zip:</p>
 
-    <pre><code>fotoloka-server-3.0.1/
+    <pre><code>fotoloka-server-3.0.2/
   photo-backup-server-all.jar      the server itself
   photobackup.properties.example   every setting, documented
   README.txt                       a short version of this page
+  extract_takeout_media.py         extract Google Takeout zips to import folder
   macos/     install.sh  uninstall.sh  and the launchd agents
   windows/   install.bat uninstall.bat run-server.bat
   linux/     install.sh  uninstall.sh  fotoloka.service</code></pre>
 
     <p>
-        Verify the download if you like &mdash; <code>shasum -a 256 fotoloka-server-3.0.1.zip</code> on
-        macOS or Linux, <code>certutil -hashfile fotoloka-server-3.0.1.zip SHA256</code> on Windows
+        Verify the download if you like &mdash; <code>shasum -a 256 fotoloka-server-3.0.2.zip</code> on
+        macOS or Linux, <code>certutil -hashfile fotoloka-server-3.0.2.zip SHA256</code> on Windows
         &mdash; and compare it with the checksum above.
     </p>
 
@@ -494,6 +496,27 @@ sudo ./linux/install.sh /mnt/photobackup                     # Linux / Pi</code>
         later, edit that one line and restart</strong> &mdash; you do not have to reinstall. On macOS
         the launch agent additionally watches the path, so the server shuts down cleanly if you unplug
         the drive.
+    </p>
+
+    <h2 id="google-photos">Importing from Google Photos</h2>
+
+    <p>
+        If you have existing photos in Google Photos, export your library with Google Takeout. The server
+        download includes <code>extract_takeout_media.py</code> to extract all photos and videos from
+        the downloaded zip archives straight into your server import folder:
+    </p>
+
+    <pre><code># macOS / Linux
+python3 extract_takeout_media.py &lt;takeout-zips-folder&gt; ~/Pictures/FamilyPhotoBackup/import/&lt;your-name&gt;
+
+# Windows
+python extract_takeout_media.py &lt;takeout-zips-folder&gt; %USERPROFILE%\Pictures\FamilyPhotoBackup\import\&lt;your-name&gt;</code></pre>
+
+    <p>
+        The script preserves your album directory structure, retains original timestamps, converts Pixel
+        motion photos (<code>.mp</code>) to <code>.mp4</code> so the server indexes them, and safely skips duplicates.
+        Once unpacked, open the Android app, go to <strong>Sync Settings</strong>, and tap
+        <strong>Scan import folder</strong>.
     </p>
 
     <h2 id="backup">Backing up, and recovering onto a new computer</h2>
