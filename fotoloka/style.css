@@ -63,3 +63,38 @@ footer.site {
     font-size: 0.9rem;
     color: var(--text-muted);
 }
+
+/* App icon and quick links layout */
+.row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin: 1.5rem 0;
+}
+
+.row .app-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: block;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.row .app-icon:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+}
+
+.row ul {
+    margin: 0;
+    padding-left: 1.2rem;
+}
+
+@media (max-width: 600px) {
+    .row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+}
