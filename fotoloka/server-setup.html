@@ -97,9 +97,9 @@
   photobackup.properties.example   every setting, documented
   README.txt                       a short version of this page
   extract_takeout_media.py         extract Google Takeout zips to import folder
-  macos/     install.sh  uninstall.sh  and the launchd agents
-  windows/   install.bat uninstall.bat run-server.bat
-  linux/     install.sh  uninstall.sh  fotoloka.service</code></pre>
+  macos/     update-install.sh  uninstall.sh  and the launchd agents
+  windows/   update-install.bat uninstall.bat run-server.bat FamilyPhotoBackup.vbs
+  linux/     update-install.sh  uninstall.sh  fotoloka.service</code></pre>
 
     <p>
         Verify the download if you like &mdash; <code>shasum -a 256 fotoloka-server-3.0.5.zip</code> on
@@ -111,21 +111,23 @@
 
     <p>Unpack the zip, open Terminal in the unpacked folder, and run:</p>
 
-    <pre><code>chmod +x macos/install.sh
-./macos/install.sh</code></pre>
+    <pre><code>chmod +x macos/update-install.sh
+./macos/update-install.sh</code></pre>
 
-    <p>To keep the library on an external drive instead, pass the folder:</p>
-
-    <pre><code>./macos/install.sh /Volumes/MyExternalDrive/PhotoBackup</code></pre>
+    <p>
+        This launches the interactive <strong>Update-Install wizard</strong> (or pass <code>--cli</code>
+        for console mode). You can choose between a fresh installation or updating an existing server.
+        The wizard lets you choose your photos folder (including an external drive), port, and server password.
+    </p>
 
     <p>The installer:</p>
     <ul>
         <li>copies the server to <code>~/Applications/FamilyPhotoBackup/</code>;</li>
-        <li>creates <code>photobackup.properties</code> there, readable only by your account;</li>
+        <li>creates <code>photobackup.properties</code> with your chosen settings (or preserves your existing configuration, backing up old files with <code>.bak</code>);</li>
         <li>registers a <code>launchd</code> agent at
             <code>~/Library/LaunchAgents/com.qspapps.photobackup.plist</code> so the server starts at
             every login;</li>
-        <li>starts it straight away.</li>
+        <li>starts it straight away in the background and verifies health.</li>
     </ul>
 
     <p>Then check it: open <code>http://localhost:8080/</code> on that Mac.</p>
@@ -160,20 +162,23 @@ launchctl load   ~/Library/LaunchAgents/com.qspapps.photobackup.plist   # start<
 
     <h2 id="windows">Installing on Windows</h2>
 
-    <p>Extract the zip, then double-click <code>windows\install.bat</code>, or from a Command Prompt:</p>
+    <p>Extract the zip, then double-click <code>windows\update-install.bat</code>, or from a Command Prompt:</p>
 
-    <pre><code>windows\install.bat</code></pre>
+    <pre><code>windows\update-install.bat</code></pre>
 
-    <p>To keep the library on an external drive:</p>
-
-    <pre><code>windows\install.bat D:\PhotoBackup</code></pre>
+    <p>
+        This opens the graphical <strong>Update-Install wizard</strong> (or pass <code>--cli</code>
+        for console mode). The wizard lets you pick Fresh Install or Update, select your photo library
+        location (such as an external drive like <code>D:\PhotoBackup</code>), configure your port and password,
+        and automatically backs up existing configurations with <code>.bak</code> files when upgrading.
+    </p>
 
     <p>The installer:</p>
     <ul>
         <li>copies the server to <code>%APPDATA%\FamilyPhotoBackup\</code>;</li>
-        <li>creates <code>photobackup.properties</code> there;</li>
-        <li>puts <code>FamilyPhotoBackup.bat</code> in your Startup folder, so the server launches at
-            every login;</li>
+        <li>creates or updates <code>photobackup.properties</code> there;</li>
+        <li>places <code>FamilyPhotoBackup.vbs</code> in your Startup folder, so the server launches silently at
+            every login in the background without keeping a blank command window open;</li>
         <li>starts it straight away.</li>
     </ul>
 
@@ -200,9 +205,13 @@ launchctl load   ~/Library/LaunchAgents/com.qspapps.photobackup.plist   # start<
     <h3>Stopping, starting and uninstalling</h3>
 
     <p>
-        Close the <em>FamilyPhotoBackup Server</em> window to stop it; run
-        <code>FamilyPhotoBackup.bat</code> from your Startup folder to start it again. To remove it:
+        To stop the server, end the Java process in Task Manager (or run <code>windows\uninstall.bat</code>
+        to remove it). To start it again manually, run <code>windows\run-server.bat</code> or
+        <code>FamilyPhotoBackup.vbs</code> from your Startup folder. Both run silently in the background
+        without leaving a blank console window open.
     </p>
+
+    <p>To remove the server completely:</p>
 
     <pre><code>windows\uninstall.bat</code></pre>
 
@@ -214,10 +223,13 @@ launchctl load   ~/Library/LaunchAgents/com.qspapps.photobackup.plist   # start<
         <code>/etc/fstab</code> so it comes back after a reboot &mdash; then:
     </p>
 
-    <pre><code>chmod +x linux/install.sh
-sudo ./linux/install.sh /mnt/photobackup</code></pre>
+    <pre><code>chmod +x linux/update-install.sh
+./linux/update-install.sh</code></pre>
 
-    <p>Leave the folder off to use <code>~/Pictures/FamilyPhotoBackup</code> instead.</p>
+    <p>
+        On a desktop with a display, this launches the graphical wizard. Over SSH or in headless environments,
+        it automatically runs in console mode (or pass <code>--cli</code>). If installing system-wide with a systemd service, run with <code>sudo ./linux/update-install.sh</code>.
+    </p>
 
     <p>The installer:</p>
     <ul>
@@ -432,7 +444,7 @@ tv.enabled = true</code></pre>
         <table>
             <tr><th>macOS</th>
                 <td><code>launchctl unload ~/Library/LaunchAgents/com.qspapps.photobackup.plist &amp;&amp; launchctl load ~/Library/LaunchAgents/com.qspapps.photobackup.plist</code></td></tr>
-            <tr><th>Windows</th><td>Run <code>FamilyPhotoBackup.bat</code> from your Startup folder again</td></tr>
+            <tr><th>Windows</th><td>Run <code>windows\run-server.bat</code> or <code>FamilyPhotoBackup.vbs</code> from your Startup folder again</td></tr>
             <tr><th>Linux / Pi</th><td><code>sudo systemctl restart fotoloka</code></td></tr>
         </table>
     </div>
@@ -485,11 +497,11 @@ tv.enabled = true</code></pre>
         &mdash; which makes the library portable and trivially easy to back up.
     </p>
 
-    <p>Pass the folder to the installer:</p>
+    <p>Select the folder in the <strong>Update-Install wizard</strong>, or pass it in console mode:</p>
 
-    <pre><code>./macos/install.sh /Volumes/MyExternalDrive/PhotoBackup      # macOS
-windows\install.bat D:\PhotoBackup                           # Windows
-sudo ./linux/install.sh /mnt/photobackup                     # Linux / Pi</code></pre>
+    <pre><code>./macos/update-install.sh                   # select folder in wizard (or pass --cli)
+windows\update-install.bat                 # select folder in wizard
+sudo ./linux/update-install.sh             # select folder in wizard</code></pre>
 
     <p>
         That writes <code>storage.root</code> into your settings file. <strong>To move the library
@@ -542,8 +554,8 @@ robocopy D:\PhotoBackup E:\PhotoBackup /MIR</code></pre>
     <ol>
         <li>Connect the external drive to the new machine.</li>
         <li>Install Java 21, then download and unpack this zip.</li>
-        <li>Run the installer, passing the drive folder &mdash; for example
-            <code>./macos/install.sh /Volumes/MyExternalDrive/PhotoBackup</code>.</li>
+        <li>Run the update-installer and select your drive folder in the wizard &mdash; for example
+            <code>/Volumes/MyExternalDrive/PhotoBackup</code> or <code>D:\PhotoBackup</code>.</li>
     </ol>
 
     <p>
